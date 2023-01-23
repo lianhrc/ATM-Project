@@ -32,19 +32,19 @@ frame.place(x=0, y=0, height=700, width=2500)
 frame = tk.Frame(login_Form)
 frame.place(x=0, y=0, height=500, width=350) 
 
-image=Image.open('img/istockphoto-1183227867-612x612.jpg')
+image=Image.open('ATM(Group)/img/istockphoto-1183227867-612x612.jpg')
 img=image.resize((400, 500), Image.ANTIALIAS)
 my_img=ImageTk.PhotoImage(img)
 
-add_help_icon = customtkinter.CTkImage(Image.open('img/info-circle-regular-24.png').resize((20,20), Image.ANTIALIAS))
-add_exit_icon = customtkinter.CTkImage(Image.open('img/exit-regular-24.png').resize((20,20), Image.ANTIALIAS))
+add_help_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/info-circle-regular-24.png').resize((20,20), Image.ANTIALIAS))
+add_exit_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/exit-regular-24.png').resize((20,20), Image.ANTIALIAS))
 
 label = tk.Label(frame, image = my_img, bg="navy")
 label.pack()
 
 label = customtkinter.CTkLabel(login_Form, text="ɮǟռӄʏʊȶ", text_color='black', bg_color='white', font=('Arial', 40))
 label.place(x=450, y=50)
-label = customtkinter.CTkLabel(login_Form, text="Hey there! just a reminder, love is like a ATM MACHINE. \n Only WITHDRAWAL makes it empty DEPOSIT \n by showing that you care today.", text_color='grey', bg_color='white', font=('Arial', 10))
+label = customtkinter.CTkLabel(login_Form, text="Hey there! just a reminder, love is like an ATM MACHINE. \n Only WITHDRAWAL makes it empty DEPOSIT \n by showing that you care today.", text_color='grey', bg_color='white', font=('Arial', 10))
 label.place(x=400, y=120)
 
 name_user = customtkinter.CTkLabel(login_Form,text="Account Name", font=('Arial', 12),bg_color='white', text_color='grey').place(x=430, y=187)
@@ -86,7 +86,7 @@ def about_app():
     label5 = customtkinter.CTkLabel(de_window, text="4. Create your own Pin.", font=('Ubuntu mono', 13),  text_color= 'black')
     label5.place(x=10, y=370, height=50, width= 185)
 
-    label6 = customtkinter.CTkLabel(de_window, text="5. Press the Regiser Button to successfully create your Account.", font=('Ubuntu mono', 13),  text_color= 'black')
+    label6 = customtkinter.CTkLabel(de_window, text="5. Press the Register Button to successfully create your Account.", font=('Ubuntu mono', 13),  text_color= 'black')
     label6.place(x=10, y=430, height=50, width= 425)
   
 help_button = customtkinter.CTkButton(master=login_Form,text=" ",command=about_app, image=add_help_icon,text_color='dark blue',corner_radius=10, bg_color='white', fg_color='white', hover_color='#2375c2')
@@ -259,7 +259,6 @@ deposit.place(x=360, y=30, height=100, width=150)
 
 
 #withDraw balance function on pop up window
-#withDraw balance function on pop up window
 def draw_balance1():
 	toplevel = tk.Toplevel()
 	toplevel.resizable(0,0)
@@ -318,10 +317,11 @@ withdraw.place(x=200, y=30, height=100, width=150)
 
 def draw_balance():
 	toplevel = tk.Toplevel()
-	toplevel.geometry("500x300")
-	toplevel.configure(background="white")
+	toplevel.geometry("225x225")
+	toplevel.configure(background="light slate gray")
+	#toplevel.wm_iconbitmap('lelu.ico')
 	
-	label1 = customtkinter.CTkLabel(master=toplevel, text="Withdrawal Menu", text_color='black', font=('arial', 20))
+	label1 = tk.Label(toplevel, text="Withdrawal Menu", font=("Helvetica", 20), bg="gray1", fg="white")
 	label1.pack()
 	
 	ent_top_name = tk.Entry(toplevel)
@@ -357,42 +357,47 @@ def draw_balance():
 			
 			statement_list.append(withdrawal_statement)
 		else:
-			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: " + str(initial_balance))
+			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: R" + str(initial_balance))
 			ent_top_name.delete(0, tk.END)
 			draw_balance()
 			ent_top_name.focus()
 			
 		print(initial_balance)
+		
 		toplevel.destroy()
+		
  
-	btn_500 = customtkinter.CTkButton(master=toplevel, text="500", command=lambda: [amount_button(500), save_draw()])
+	btn_500 = tk.Button(toplevel, text="500", command=lambda: [amount_button(500), save_draw()])
 	btn_500.place(x=20, y=50, height=25, width=90)
 	
-	btn_1000 = customtkinter.CTkButton(master=toplevel, text="1,000", command=lambda: [amount_button(1000), save_draw()])
+	btn_1000 = tk.Button(toplevel, text="1,000", command=lambda: [amount_button(1000), save_draw()])
 	btn_1000.place(x=115, y=50, height=25, width=90)
 	
-	btn_2000 = customtkinter.CTkButton(master=toplevel, text="2,000", command=lambda: [amount_button(2000), save_draw()])
+	btn_2000 = tk.Button(toplevel, text="2,000", command=lambda: [amount_button(2000), save_draw()])
 	btn_2000.place(x=20, y=80, height=25, width=90)
  
-	btn_3000 = customtkinter.CTkButton(master=toplevel, text="3,000", command=lambda: [amount_button(3000), save_draw()])
+	btn_3000 = tk.Button(toplevel, text="3,000", command=lambda: [amount_button(3000), save_draw()])
 	btn_3000.place(x=115, y=80, height=25, width=90)
  
-	btn_5000 = customtkinter.CTkButton(master=toplevel, text="5,000", command=lambda: [amount_button(5000), save_draw()])
+	btn_5000 = tk.Button(toplevel, text="5,000", command=lambda: [amount_button(5000), save_draw()])
 	btn_5000.place(x=20, y=110, height=25, width=90)
  
-	btn_6000 = customtkinter.CTkButton(master=toplevel, text="6,000", command=lambda: [amount_button(6000), save_draw()])
+	btn_6000 = tk.Button(toplevel, text="6,000", command=lambda: [amount_button(6000), save_draw()])
 	btn_6000.place(x=115, y=110, height=25, width=90)
  
-	btn_8000 = customtkinter.CTkButton(master=toplevel, text="8,000", command=lambda: [amount_button(8000), save_draw()])
+	btn_8000 = tk.Button(toplevel, text="8,000", command=lambda: [amount_button(8000), save_draw()])
 	btn_8000.place(x=20, y=140, height=25, width=90)
  
-	btn_10000 = customtkinter.CTkButton(master=toplevel, text="10,000", command=lambda: [amount_button(10000), save_draw()])
+	btn_10000 = tk.Button(toplevel, text="10,000", command=lambda: [amount_button(10000), save_draw()])
 	btn_10000.place(x=115, y=140, height=25, width=90)
 	
-	btn_otherAmount = customtkinter.CTkButton(master=toplevel, text="Enter other amount", command=lambda: [draw_balance1(), destroy_window()])
+	btn_otherAmount = tk.Button(toplevel, text="Enter other amount", command=lambda: [draw_balance1(), destroy_window()])
 	btn_otherAmount.place(x=20, y=170, height=25, width=185)
+ 
+	lbl_blank = tk.Label(toplevel, text=" ", bg="light slate gray")
+	lbl_blank.pack()
 
-	btn_cancel = customtkinter.CTkButton(master=toplevel, text="Cancel Transaction", command=toplevel.destroy)
+	btn_cancel = tk.Button(toplevel, text="Cancel Transaction", command=toplevel.destroy)
 	btn_cancel.place(x=20, y=200, height=25, width=185)
 	
 withdraw = customtkinter.CTkButton(master=window,text="WITHDRAW", text_color='white',corner_radius=10, bg_color='white', fg_color='navy blue', command=draw_balance)
