@@ -32,12 +32,12 @@ frame.place(x=0, y=0, height=700, width=2500)
 frame = tk.Frame(login_Form)
 frame.place(x=0, y=0, height=500, width=350) 
 
-image=Image.open('ATM(Group)/img/istockphoto-1183227867-612x612.jpg')
+image=Image.open('img/istockphoto-1183227867-612x612.jpg')
 img=image.resize((400, 500), Image.ANTIALIAS)
 my_img=ImageTk.PhotoImage(img)
 
-add_help_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/info-circle-regular-24.png').resize((20,20), Image.ANTIALIAS))
-add_exit_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/exit-regular-24.png').resize((20,20), Image.ANTIALIAS))
+add_help_icon = customtkinter.CTkImage(Image.open('img/info-circle-regular-24.png').resize((20,20), Image.ANTIALIAS))
+add_exit_icon = customtkinter.CTkImage(Image.open('img/exit-regular-24.png').resize((20,20), Image.ANTIALIAS))
 
 label = tk.Label(frame, image = my_img, bg="navy")
 label.pack()
@@ -259,7 +259,8 @@ deposit.place(x=360, y=30, height=100, width=150)
 
 
 #withDraw balance function on pop up window
-def draw_balance():
+#withDraw balance function on pop up window
+def draw_balance1():
 	toplevel = tk.Toplevel()
 	toplevel.resizable(0,0)
 	toplevel.configure(background="light slate gray")
@@ -296,7 +297,7 @@ def draw_balance():
 		else:
 			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: R" + str(initial_balance))
 			ent_top_name.delete(0, tk.END)
-			draw_balance()
+			draw_balance1()
 			ent_top_name.focus()
 			
 		print(initial_balance)
@@ -311,6 +312,88 @@ def draw_balance():
 
 	btn_cancel = tk.Button(toplevel, text="Cancel Transaction", command=toplevel.destroy)
 	btn_cancel.pack(fill=tk.X)
+	
+withdraw = customtkinter.CTkButton(master=window,text="WITHDRAW", text_color='white',corner_radius=10, bg_color='white', fg_color='navy blue', command=draw_balance1)
+withdraw.place(x=200, y=30, height=100, width=150)
+
+def draw_balance():
+	toplevel = tk.Toplevel()
+	toplevel.geometry("500x300")
+	toplevel.configure(background="white")
+	
+	label1 = customtkinter.CTkLabel(master=toplevel, text="Withdrawal Menu", text_color='black', font=('arial', 20))
+	label1.pack()
+	
+	ent_top_name = tk.Entry(toplevel)
+
+	ent_top_name.focus()
+	
+	def destroy_window():
+		toplevel.destroy()
+ 
+	def amount_button(num):
+		current = ent_top_name.get()
+		ent_top_name.delete(0, tk.END)
+		ent_top_name.insert(0, str(current) + str(num))
+		return
+ 
+	
+	def save_draw():
+		var_draw = ent_top_name.get()
+		var_draw = int(var_draw)
+		
+		global initial_balance
+		global withdrawal_statement
+		global statement_list
+		
+		if initial_balance >= var_draw:
+			initial_balance = initial_balance - var_draw
+			
+			#withdrawal time and date
+			time_draw = time.strftime('%H:%M:%S')
+			date_draw = time.strftime('%Y-%m-%d')
+
+			withdrawal_statement = "Withdrawal of " + str(var_draw) + " made at " + str(time_draw) + " on date: " + str(date_draw)
+			
+			statement_list.append(withdrawal_statement)
+		else:
+			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: " + str(initial_balance))
+			ent_top_name.delete(0, tk.END)
+			draw_balance()
+			ent_top_name.focus()
+			
+		print(initial_balance)
+		toplevel.destroy()
+ 
+	btn_500 = customtkinter.CTkButton(master=toplevel, text="500", command=lambda: [amount_button(500), save_draw()])
+	btn_500.place(x=20, y=50, height=25, width=90)
+	
+	btn_1000 = customtkinter.CTkButton(master=toplevel, text="1,000", command=lambda: [amount_button(1000), save_draw()])
+	btn_1000.place(x=115, y=50, height=25, width=90)
+	
+	btn_2000 = customtkinter.CTkButton(master=toplevel, text="2,000", command=lambda: [amount_button(2000), save_draw()])
+	btn_2000.place(x=20, y=80, height=25, width=90)
+ 
+	btn_3000 = customtkinter.CTkButton(master=toplevel, text="3,000", command=lambda: [amount_button(3000), save_draw()])
+	btn_3000.place(x=115, y=80, height=25, width=90)
+ 
+	btn_5000 = customtkinter.CTkButton(master=toplevel, text="5,000", command=lambda: [amount_button(5000), save_draw()])
+	btn_5000.place(x=20, y=110, height=25, width=90)
+ 
+	btn_6000 = customtkinter.CTkButton(master=toplevel, text="6,000", command=lambda: [amount_button(6000), save_draw()])
+	btn_6000.place(x=115, y=110, height=25, width=90)
+ 
+	btn_8000 = customtkinter.CTkButton(master=toplevel, text="8,000", command=lambda: [amount_button(8000), save_draw()])
+	btn_8000.place(x=20, y=140, height=25, width=90)
+ 
+	btn_10000 = customtkinter.CTkButton(master=toplevel, text="10,000", command=lambda: [amount_button(10000), save_draw()])
+	btn_10000.place(x=115, y=140, height=25, width=90)
+	
+	btn_otherAmount = customtkinter.CTkButton(master=toplevel, text="Enter other amount", command=lambda: [draw_balance1(), destroy_window()])
+	btn_otherAmount.place(x=20, y=170, height=25, width=185)
+
+	btn_cancel = customtkinter.CTkButton(master=toplevel, text="Cancel Transaction", command=toplevel.destroy)
+	btn_cancel.place(x=20, y=200, height=25, width=185)
 	
 withdraw = customtkinter.CTkButton(master=window,text="WITHDRAW", text_color='white',corner_radius=10, bg_color='white', fg_color='navy blue', command=draw_balance)
 withdraw.place(x=200, y=30, height=100, width=150)
