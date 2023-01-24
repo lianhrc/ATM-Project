@@ -1,8 +1,9 @@
 import time
 import tkinter as tk
 import customtkinter
-from tkinter import messagebox, Frame
 from PIL import ImageTk, Image   # PIL module for images
+import mysql.connector as mysql
+from tkinter import messagebox
 
 #atm menu instantiation
 window = tk.Tk()
@@ -20,10 +21,9 @@ window.configure(background="#2C3333")
 #####################################################################
 #Login Form
 #toplevel window for Login
-login_Form = tk.Toplevel()
+login_Form = tk.Toplevel()	
 login_Form.wm_geometry("700x500")
 login_Form.resizable(0,0)
-login_Form.configure(background="light slate gray")
 
 frame = tk.Frame(login_Form, background='#2C3333')
 frame.place(x=0, y=0, height=700, width=2500)
@@ -35,17 +35,24 @@ image=Image.open('ATM(Group)/img/istockphoto-1183227867-612x612.jpg')
 img=image.resize((400, 500), Image.ANTIALIAS)
 my_img=ImageTk.PhotoImage(img)
 
+
+add_login_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/user-circle-solid-24.png').resize((20,20), Image.ANTIALIAS))
+add_register_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/user-plus-solid-24.png').resize((20,20), Image.ANTIALIAS))
 add_help_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/info-circle-regular-24.png').resize((20,20), Image.ANTIALIAS))
 add_exit_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/exit-regular-24.png').resize((20,20), Image.ANTIALIAS))
+add_balance_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/wallet-solid-24(1).png').resize((20,20), Image.ANTIALIAS))
+add_receipt_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/receipt-solid-24(1).png').resize((20,20), Image.ANTIALIAS))
+add_deposit_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/layer-plus-solid-24.png').resize((20,20), Image.ANTIALIAS))
+add_withdraw_icon = customtkinter.CTkImage(Image.open('ATM(Group)/img/peso.png').resize((20,20), Image.ANTIALIAS))
+
 
 label = tk.Label(frame, image = my_img, bg="#2C3333")
 label.pack()
 
-label = customtkinter.CTkLabel(login_Form, text="ɮǟռӄʏʊȶ", text_color='#E7F6F2', bg_color='#2C3333', font=('Arial', 40))
+label = customtkinter.CTkLabel(master=login_Form, text="ɮǟռӄʏʊȶ", text_color='#E7F6F2', bg_color='#2C3333', font=('Arial', 40))
 label.place(x=450, y=70)
 
 name_user = customtkinter.CTkLabel(login_Form,text="Account Name", font=('Arial', 12),bg_color='#2C3333', text_color='#E7F6F2').place(x=430, y=187)
-
 pin = customtkinter.CTkLabel(login_Form,text="Enter Your Pin", font=('Arial', 12),bg_color='#2C3333', text_color='#E7F6F2').place(x=430, y=270)
 
 textbox = customtkinter.CTkEntry(login_Form,width=35,font=('Arial', 12), fg_color='#2C3333',bg_color='#2C3333', text_color='#E7F6F2', corner_radius=10, border_width=1)
@@ -89,36 +96,44 @@ def about_app():
 help_button = customtkinter.CTkButton(master=login_Form,text=" ",command=about_app, image=add_help_icon,corner_radius=5, bg_color='#2C3333', fg_color='#E7F6F2', hover_color='#A5C9CA')
 help_button.place(x=660, y=10, height=30, width=50)
 
-def register_button():
-        messagebox.showinfo("Your acount has been created")
-
 def register():
-    register_form = tk.Toplevel(window)
-    register_form.config(bg='white')
-    register_form.geometry("700x500")
-    register_form.title("Register Form")
+	register_form = tk.Toplevel(window)
+	register_form.config(bg='white')
+	register_form.geometry("700x500")
+	register_form.title("Register Form")
 
-    label = tk.Label(register_form, text="BANK REGISTER FORM", font=('Arial', 10), bg='white')
-    label.pack(padx=10,pady=15)
-    
-    textbox = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Account number', border_width=1)
-    textbox.place(x=50, y=70, height=45,width=220)
-    
-    textbox = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Phone number', border_width=1)
-    textbox.place(x=50, y=140, height=45,width=220)
-    
-    textbox = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Address', border_width=1)
-    textbox.place(x=50, y=210, height=45,width=220)
-    
-    textbox = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Create your Pin', border_width=1)
-    textbox.place(x=50, y=280, height=45,width=220)
-    
-    btn4 = customtkinter.CTkButton(master=register_form, text="Register", command=register_button, text_color='white',corner_radius=10, bg_color='white', fg_color='dark blue')
-    btn4.place(x=300, y=450, height=30, width=130)
+	label = tk.Label(register_form, text="BANK REGISTER FORM", font=('Arial', 10), bg='white')
+	label.pack(padx=10,pady=15)
 
+	accNumber = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Account number', border_width=1)
+	accNumber.place(x=50, y=70, height=45,width=220)
 
-register= customtkinter.CTkButton(master=login_Form, text="Register / Sign up", text_color='#2C3333',corner_radius=5, bg_color='#2C3333', fg_color='#E7F6F2', command=register)
+	phoneNumber = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Phone number', border_width=1)
+	phoneNumber.place(x=50, y=140, height=45,width=220)
+
+	address = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Address', border_width=1)
+	address.place(x=50, y=210, height=45,width=220)
+
+	pin4 = customtkinter.CTkEntry(register_form,width=35,font=('Arial', 12), fg_color='white',bg_color='white', text_color='black', corner_radius=10,placeholder_text='Create your Pin', border_width=1)
+	pin4.place(x=50, y=280, height=45,width=220)
+ 
+	def register_button():
+		if(accNumber.get()=="" or phoneNumber.get()=="" or address.get()=="" or pin4.get()==""):
+			messagebox.showinfo('status',"All Fields are Required")
+		else:
+			con = mysql.connect(host='localhost', database='atm', user='root', password='')
+			cursor = con.cursor()
+			cursor.execute("INSERT INTO data_table (account, number, address, pin) VALUES ('"+ accNumber.get() +"','"+ phoneNumber.get() \
+			+"', '"+ address.get() +"', '"+ pin4.get() +"' )")
+			cursor.execute("commit")
+			messagebox.showinfo('Status',"Registration successful!")
+			con.close()
+	btn4 = customtkinter.CTkButton(master=register_form, text="Register", command=register_button, text_color='white',corner_radius=10, bg_color='white', fg_color='dark blue')
+	btn4.place(x=300, y=450, height=30, width=130)
+
+register= customtkinter.CTkButton(master=login_Form, text="Register", text_color='#2C3333',corner_radius=5, bg_color='#2C3333', fg_color='#E7F6F2', command=register, image=add_register_icon, compound='left')
 register.place(x=410, y=390, height=30, width=130)
+
 
 #security counter variable
 sec_count = 3
@@ -145,12 +160,14 @@ def login_check():
        else:
            messagebox.showerror("Error", "Incorrect Password" + "\n   Attempts left: " + str(sec_count - 1))
            textbox.delete(0, tk.END)
+           textbox1.delete(0, tk.END)      
            textbox.focus()
            sec_count -= 1
            print(sec_count)
     else:
         messagebox.showerror("Error", "Incorrect Password" + "\n   Attempts left: " + str(sec_count - 1))
         textbox.delete(0, tk.END)
+        textbox1.delete(0, tk.END)      
         textbox.focus()
         sec_count -= 1
         print(sec_count)
@@ -160,17 +177,11 @@ def login_check():
         login_Form.destroy()
   
 #Login button 
-btn2 = customtkinter.CTkButton(master=login_Form, text="Log in",text_color='#2C3333',corner_radius=5, bg_color='#2C3333', fg_color='#E7F6F2', command=login_check)
-btn2.place(x=560, y=390, height=30, width=70)
+btn2 = customtkinter.CTkButton(master=login_Form, text="Log in",text_color='#2C3333',corner_radius=5, bg_color='#2C3333', fg_color='#E7F6F2', command=login_check, image=add_login_icon, compound='left')
+btn2.place(x=550, y=390, height=30, width=80)
 
-menubar = tk.Menu(window)
-myMenu = tk.Menu(menubar, tearoff=0)
-
-#display the menu bar
-window.config(menu=menubar)
 
 #ATM Visual Menu
-
 #header labels and blank space separator
 label = customtkinter.CTkLabel(window, text="ɮǟռӄʏʊȶ", fg_color='#2C3333', text_color='#E7F6F2', bg_color='#2C3333')
 label.place(x=10, y=10)
@@ -186,19 +197,17 @@ time_statement = ""
 
 statement_list = []
 
-
 #Checking balance function on pop up window
 def check_balance():
 	messagebox.showinfo("Balance", "Amount Available: " + str(initial_balance))
 	
-balance = customtkinter.CTkButton(master=window,text="BALANCE",text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=check_balance,hover_color='#A5C9CA')
-balance.place(x=200, y=140, height=100, width=150)
+balance = customtkinter.CTkButton(master=window,text="BALANCE",text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=check_balance,hover_color='#A5C9CA', image=add_balance_icon, compound='left')
+balance.place(x=50, y=170, height=50, width=280)
 
 #Deposit balance function on pop up window
 def deposit_balance():
 
 	toplevel = tk.Toplevel()
-	toplevel.resizable(0,0)
 	toplevel.configure(background="white")
 	
 	label1 = tk.Label(toplevel, text="Deposit Menu", font=("Helvetica", 20), bg="gray1", fg="white")
@@ -234,7 +243,6 @@ def deposit_balance():
 			print(deposit_statement)
 			print(" ")
 			print(initial_balance)
-		
 			toplevel.destroy()
 			
 		else:
@@ -245,22 +253,17 @@ def deposit_balance():
 	btn_save = tk.Button(toplevel, text="Validate", command=save_deposit)
 	btn_save.pack()
 	
-	lbl_blank = tk.Label(toplevel, text=" ", bg="light slate gray")
-	lbl_blank.pack()
-	
 	btn_cancel = tk.Button(toplevel, text="Cancel Transaction", command=toplevel.destroy)
 	btn_cancel.pack(fill=tk.X)
 	
-deposit = customtkinter.CTkButton(master=window,text="DEPOSIT", text_color='#395B64',corner_radius=10, bg_color='#2C3333', fg_color="#E7F6F2", command=deposit_balance, hover_color='#A5C9CA')
-deposit.place(x=360, y=30, height=100, width=150)
-
+deposit = customtkinter.CTkButton(master=window,text="DEPOSIT", text_color='#395B64',corner_radius=10, bg_color='#2C3333', fg_color="#E7F6F2", command=deposit_balance, hover_color='#A5C9CA', image=add_deposit_icon, compound='left')
+deposit.place(x=360, y=80, height=50, width=280)
 
 #withDraw balance function on pop up window
 def draw_balance1():
 	toplevel = tk.Toplevel()
 	toplevel.resizable(0,0)
 	toplevel.configure(background="light slate gray")
-	#toplevel.wm_iconbitmap('lelu.ico')
 	
 	label1 = customtkinter.CTkLabel(toplevel, text="Withdrawal Menu", font=("Helvetica", 20))
 	label1.pack()
@@ -291,7 +294,7 @@ def draw_balance1():
 			
 			statement_list.append(withdrawal_statement)
 		else:
-			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: R" + str(initial_balance))
+			messagebox.showinfo("Error", "Insufficient Funds" + "\nMax Balance Allowed: " + str(initial_balance))
 			ent_top_name.delete(0, tk.END)
 			draw_balance1()
 			ent_top_name.focus()
@@ -311,14 +314,13 @@ def draw_balance1():
 	
 def draw_balance():
 	toplevel = tk.Toplevel()
-	toplevel.geometry("700x500")
-	toplevel.configure(background="white")
+	toplevel.geometry("485x420")
+	toplevel.configure(background="#2C3333")
 	
-	label1 = customtkinter.CTkLabel(toplevel, text="Withdrawal Menu", font=("Helvetica", 20), text_color='black')
+	label1 = customtkinter.CTkLabel(toplevel, text="Withdrawal Menu", font=("Helvetica", 20), text_color='#E7F6F2')
 	label1.pack()
 	
 	ent_top_name = tk.Entry(toplevel)
-
 	ent_top_name.focus()
 	
 	def destroy_window():
@@ -355,41 +357,40 @@ def draw_balance():
 			ent_top_name.focus()
 			
 		print(initial_balance)
-		
 		toplevel.destroy()
  
 	btn_500 = customtkinter.CTkButton(master=toplevel, text="500", command=lambda: [amount_button(500), save_draw()])
-	btn_500.place(x=150, y=50, height=50, width=205)
+	btn_500.place(x=30, y=50, height=50, width=205)
 	
 	btn_1000 = customtkinter.CTkButton(master=toplevel, text="1,000", command=lambda: [amount_button(1000), save_draw()])
-	btn_1000.place(x=360, y=50, height=50, width=205)
+	btn_1000.place(x=240, y=50, height=50, width=205)
 	
 	btn_2000 = customtkinter.CTkButton(master=toplevel, text="2,000", command=lambda: [amount_button(2000), save_draw()])
-	btn_2000.place(x=150, y=110, height=50, width=205)
+	btn_2000.place(x=30, y=110, height=50, width=205)
  
 	btn_3000 = customtkinter.CTkButton(master=toplevel, text="3,000", command=lambda: [amount_button(3000), save_draw()])
-	btn_3000.place(x=360, y=110, height=50, width=205)
+	btn_3000.place(x=240, y=110, height=50, width=205)
 	
 	btn_5000 = customtkinter.CTkButton(master=toplevel, text="5,000", command=lambda: [amount_button(5000), save_draw()])
-	btn_5000.place(x=150, y=170, height=50, width=205)
+	btn_5000.place(x=30, y=170, height=50, width=205)
  
 	btn_6000 = customtkinter.CTkButton(master=toplevel, text="6,000", command=lambda: [amount_button(6000), save_draw()])
-	btn_6000.place(x=360, y=170, height=50, width=205)
+	btn_6000.place(x=240, y=170, height=50, width=205)
 	
 	btn_8000 = customtkinter.CTkButton(master=toplevel, text="8,000", command=lambda: [amount_button(8000), save_draw()])
-	btn_8000.place(x=150, y=230, height=50, width=205)
+	btn_8000.place(x=30, y=230, height=50, width=205)
  
 	btn_10000 = customtkinter.CTkButton(master=toplevel, text="10,000", command=lambda: [amount_button(10000), save_draw()])
-	btn_10000.place(x=360, y=230, height=50, width=205)
+	btn_10000.place(x=240, y=230, height=50, width=205)
 	
 	btn_otherAmount = customtkinter.CTkButton(master=toplevel, text="Enter other amount", command=lambda: [draw_balance1(), destroy_window()])
-	btn_otherAmount.place(x=150, y=290, height=50, width=415)
+	btn_otherAmount.place(x=30, y=290, height=50, width=415)
 
 	btn_cancel = customtkinter.CTkButton(master=toplevel, text="Cancel Transaction", command=toplevel.destroy)
-	btn_cancel.place(x=150, y=350, height=50, width=415)
+	btn_cancel.place(x=30, y=350, height=50, width=415)
  
-withdraw = customtkinter.CTkButton(master=window,text="WITHDRAW", text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=draw_balance, hover_color='#A5C9CA')
-withdraw.place(x=200, y=30, height=100, width=150)
+withdraw = customtkinter.CTkButton(master=window,text="WITHDRAW", text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=draw_balance, hover_color='#A5C9CA', image=add_withdraw_icon, compound='left')
+withdraw.place(x=50, y=80, height=50, width=280)
 
 #Print statement function on pop up window
 def statement():
@@ -399,7 +400,6 @@ def statement():
 	global initial_balance
 	
 	time1 = time.strftime('%H:%M:%S')
-	
 	date1 = time.strftime('%Y-%m-%d')
 	
 	time_statement = "Statement printed at " + str(time1) + " on date: " + str(date1)
@@ -436,14 +436,14 @@ def statement():
 	btn_close = tk.Button(toplevel, text="Close Statement", command=toplevel.destroy)
 	btn_close.pack()
 	
-transcipt = customtkinter.CTkButton(master=window,text="TRANSACTION\n RECEIPT", text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=statement, hover_color='#A5C9CA')
-transcipt.place(x=360, y=140, height=100, width=150)
+transcipt = customtkinter.CTkButton(master=window,text="TRANSACTION RECEIPT", text_color='#395B64',corner_radius=10, bg_color='#2C3333',  fg_color="#E7F6F2",command=statement, hover_color='#A5C9CA', image=add_receipt_icon, compound='left')
+transcipt.place(x=360, y=170, height=50, width=280)
 
 def log_out():     
         if messagebox.askyesno(title="Log out", message="Are you sure you want to exit?"):
             window.destroy()      
 
-exit_button = customtkinter.CTkButton(master=window,text="Exit", text_color='#395B64',corner_radius=10, bg_color='#2C3333',fg_color='#E7F6F2', command=log_out, image=add_exit_icon, hover_color='#A5C9CA')
-exit_button.place(x=610, y=10, height=30, width=80)
+exit_button = customtkinter.CTkButton(master=window,text="Card Remove", text_color='#395B64',corner_radius=10, bg_color='#2C3333',fg_color='#E7F6F2', command=log_out, image=add_exit_icon, hover_color='#A5C9CA')
+exit_button.place(x=550, y=10, height=30, width=130)
 
 window.mainloop()
