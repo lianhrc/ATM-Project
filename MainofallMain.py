@@ -2,7 +2,6 @@ import time
 import tkinter as tk
 import customtkinter
 from tkinter import messagebox, Frame
-from tkinter import StringVar
 from PIL import ImageTk, Image   # PIL module for images
 
 #atm menu instantiation
